@@ -152,11 +152,11 @@
                     morphTargets: true
                 })
             );
-            mesh.scale.set(0.025, 0.025, 0.025);
+            mesh.scale.set(0.0175, 0.0175, 0.0175);
             //mesh.rotateY(Math.PI);
             //mesh.rotateZ(60);
             //mesh.rotateY(45);
-            //mesh.rotateX(-45);
+            mesh.rotateX(-45);
             arWorldRoot.add(mesh);
 
             mixer = new THREE.AnimationMixer(mesh);
