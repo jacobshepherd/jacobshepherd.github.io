@@ -154,7 +154,7 @@
             );
             mesh.scale.set(0.0125, 0.0125, 0.0125);
             //mesh.rotateY(Math.PI);
-            scene.add(mesh);
+            arWorldRoot.add(mesh);
 
             mixer = new THREE.AnimationMixer(mesh);
             var clip = THREE.AnimationClip.CreateFromMorphTargetSequence(
