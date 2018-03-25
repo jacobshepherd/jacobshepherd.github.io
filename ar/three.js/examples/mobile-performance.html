@@ -7,8 +7,8 @@
 <script src="../build/ar.js"></script>
 <script>THREEx.ArToolkitContext.baseURL = '../'</script>
 
-<body style='margin : 0px; overflow: hidden; font-family: Arial;'><div style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
-	Be Bold. Don't quack like a duck, soar like an eagle.
+<body style='margin : 0px; overflow: hidden; font-family: Arial; font-weight:bold;'><div style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
+	Don't quack like a duck, soar like an eagle.
 </div><script>
 	//////////////////////////////////////////////////////////////////////////////////
 	//		Init
@@ -108,7 +108,7 @@
 	scene.add(markerRoot)
 	var artoolkitMarker = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
 		type : 'pattern',
-		patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.hiro'
+		patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.ar'
 		// patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji'
 	})
 
