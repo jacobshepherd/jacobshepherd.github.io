@@ -123,7 +123,19 @@
 	onRenderFcts.push(function(delta){
 		smoothedControls.update(markerRoot)
     })
+    //===================================================== add Grid
 
+    var plane = new THREE.Mesh(
+        new THREE.PlaneGeometry(200, 200),
+        new THREE.MeshBasicMaterial({ color: 0x101018 })
+    );
+    plane.rotation.x = -90 * Math.PI / 180;
+    scene.add(plane);
+    //===================================================== add Fog
+    scene.fog = new THREE.Fog(0xd0e0f0, 2, 100);
+    //===================================================== add Axis Helper
+    let axisHelper = new THREE.AxisHelper(1);
+    scene.add(axisHelper);
     //===================================================== add Light
     var light = new THREE.DirectionalLight(0xefefff, 1.5);
     light.position.set(1, 1, 1).normalize();
