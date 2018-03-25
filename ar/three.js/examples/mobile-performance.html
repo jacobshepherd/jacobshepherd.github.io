@@ -9,7 +9,7 @@
 
 <body style='margin : 0px; overflow: hidden; font-family: Arial; font-weight:bold; color: #b2d236;'>
     <div style='position: absolute; top: 10px; left:50px; width:100%; text-align: center; z-index: 1;'>
-        Point your camera at the AR Code..
+        Point your camera at the AR Code...
     </div>
     <script>
 
@@ -200,7 +200,16 @@
         var stats = new Stats();
         document.body.appendChild(stats.dom);
         // render the scene
+
+        var prevTime = Date.now();
+
         onRenderFcts.push(function () {
+            if (mixer) {
+                let time = Date.now();
+                mixer.update((time - prevTime) * 0.001);
+                prevTime = time;
+            }
+
             renderer.render(scene, camera);
             stats.update();
         })
