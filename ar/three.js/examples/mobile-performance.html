@@ -103,9 +103,15 @@
         })
 
         // add marker found event
-        arToolkitContext.addEventListener('markerFound', function (event) {
+        //arToolkitContext.addEventListener('markerFound', function (event) {
+        //    // this doesn't appear to work
+        //})
+
+        if (document.querySelector("a-marker").object3D.visible == true) {
+            // play the sound
             document.getElementById("my_audio").play();
-        })
+        }
+
 
         ////////////////////////////////////////////////////////////////////////////////
         //          Create a ArMarkerControls
