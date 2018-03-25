@@ -14,7 +14,9 @@
     <audio id="my_audio" src="../data/sound/eagle.mp3"></audio>
     <script>
 
-        document.getElementById("my_audio").play();
+        window.onload = function () {
+            document.getElementById("my_audio").play();
+        }
 
         //////////////////////////////////////////////////////////////////////////////////
         //		Init
