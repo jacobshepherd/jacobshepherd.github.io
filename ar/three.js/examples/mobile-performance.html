@@ -124,14 +124,6 @@
 		smoothedControls.update(markerRoot)
     })
 
-    //===================================================== add Light
-    var light = new THREE.DirectionalLight(0xefefff, 1.5);
-    light.position.set(1, 1, 1).normalize();
-    scene.add(light);
-
-    var light = new THREE.DirectionalLight(0xffefef, 1.5);
-    light.position.set(-1, -1, -1).normalize();
-    scene.add(light);
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		add an object in the scene
@@ -153,7 +145,7 @@
                 })
             );
             mesh.scale.set(0.0125, 0.0125, 0.0125);
-            //mesh.rotateY(Math.PI);
+            mesh.rotateY(Math.PI);
             arWorldRoot.add(mesh);
 
             mixer = new THREE.AnimationMixer(mesh);
