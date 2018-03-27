@@ -101,8 +101,9 @@
             // copy projection matrix to camera
             camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
 
-            var audio = new Audio("https://raw.githubusercontent.com/jacobshepherd/jacobshepherd.github.io/master/ar/data/sound/eagle.mp3");
-            audio.play();
+            //not compatible with ios 11
+            //var audio = new Audio("https://raw.githubusercontent.com/jacobshepherd/jacobshepherd.github.io/master/ar/data/sound/eagle.mp3");
+            //audio.play();
         })
 
         // update artoolkit on every frame
