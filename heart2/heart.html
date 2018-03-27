@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>heart</title>
+    <style>
+      body {
+        /*background-color: #222222;*/
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+</head>
+<body>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r70/three.min.js"></script>
+<script type="text/javascript" src="http://mrdoob.github.com/three.js/examples/js/Detector.js"></script>
+<script type="text/javascript" src="http://mrdoob.github.com/three.js/examples/fonts/optimer_bold.typeface.js"></script>
+<script type="text/javascript">
+  var renderer, scene, camera, mesh;
+
+  // for mouse rotation, from offical example
+  var targetRotation = 0;
+  var targetRotationOnMouseDown = 0;
+  var mouseX = 0;
+  var mouseXOnMouseDown = 0;
+  var windowHalfX = window.innerWidth / 2;
+  var windowHalfY = window.innerHeight / 2;
+  var parent;
+
+  init();
+  animate();
+
+  function init() {
+    if(!Detector.webgl) Detector.addGetWebGLMessage();
+
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor( 0x222222, 1);
+    document.body.appendChild(renderer.domElement);
+
+    scene = new THREE.Scene();
+
+    camera = new THREE.PerspectiveCamera(15,
+        window.innerWidth / window.innerHeight,
+        0.1, 10000);
+    camera.position.set(0, 0, 15);
+    scene.add(camera);
+
+    var directionalLight = new THREE.DirectionalLight(0xffffff);
+    directionalLight.position.set(0, 0, 10);
+    scene.add(directionalLight);
+
+    parent = new THREE.Object3D();
+    parent.scale = new THREE.Vector3(0.001,0.001,0.001);
+    // parent.rotation.y = 3.3;
+
+    // load the heart model
+    var loader = new THREE.JSONLoader();
+    loader.load("heart.js", function(geo){
+        var material = new THREE.MeshFaceMaterial([ 
+          new THREE.MeshPhongMaterial({color: 0xff0000, shading: THREE.SmoothShading}),
+        ]);
+        mesh = new THREE.Mesh(geo, material);
+        scene.add(mesh);
+        // wait
+        scene.add( parent );
+    });
+
+    // for mouse rotation, from offical example
+    document.addEventListener('mousedown', onDocumentMouseDown, false);
+    document.addEventListener('touchstart', onDocumentTouchStart, false);
+    document.addEventListener('touchmove', onDocumentTouchMove, false);
+  };
+
+  // below functions are for mouse rotation, from offical example
+  function onDocumentMouseDown( event ) {
+    event.preventDefault();
+    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+    document.addEventListener( 'mouseup', onDocumentMouseUp, false );
+    document.addEventListener( 'mouseout', onDocumentMouseOut, false );
+    mouseXOnMouseDown = event.clientX - windowHalfX;
+    targetRotationOnMouseDown = targetRotation;
+  }
+  
+  function onDocumentMouseMove( event ) {
+    mouseX = event.clientX - windowHalfX;
+    targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.01;
+  }
+  
+  function onDocumentMouseUp( event ) {
+    document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+    document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+    document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
+  }
+  
+  function onDocumentMouseOut( event ) {
+    document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+    document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+    document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
+  }
+  
+  function onDocumentTouchStart( event ) {
+    if ( event.touches.length === 1 ) {
+      event.preventDefault();
+      mouseXOnMouseDown = event.touches[ 0 ].pageX - windowHalfX;
+      targetRotationOnMouseDown = targetRotation;
+    }
+  }
+  
+  function onDocumentTouchMove( event ) {
+    if ( event.touches.length === 1 ) {
+      event.preventDefault();
+      mouseX = event.touches[ 0 ].pageX - windowHalfX;
+      targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.05;
+    }
+  }
+  
+  function animate() {
+    requestAnimationFrame( animate );
+    render();
+  }
+  
+  function render() {
+    // remember to change this
+    if(mesh){
+      document.title='heart';
+      mesh.rotation.y -= ( targetRotation + mesh.rotation.y ) * 0.05;
+      parent.rotation.y = 3.1415 - mesh.rotation.y;
+    }else
+      document.title='loading';
+    renderer.render( scene, camera );
+  }
+</script>
+</body>
+</html>

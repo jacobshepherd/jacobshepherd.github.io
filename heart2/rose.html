@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Rose</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+      body {
+        color: #fff;
+        font-size:13px;
+        text-align:center;
+        background-color: #fff;
+        margin: 0px;
+        overflow: hidden;
+      }
+      #info {
+        position: absolute;
+        top: 0px; width: 100%;
+        padding: 5px;
+      }
+    </style>
+	</head>
+
+	<body>
+    <div id="info"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r70/three.min.js"></script>
+    <!--<script src="http://mrdoob.github.com/three.js/build/three.min.js"></script>-->
+		<script src="https://mrdoob.github.com/three.js/examples/js/loaders/MTLLoader.js"></script>
+		<script src="https://mrdoob.github.com/three.js/examples/js/loaders/OBJMTLLoader.js"></script>
+		<script src="https://mrdoob.github.com/three.js/examples/js/Detector.js"></script>
+		<script src="https://mrdoob.github.com/three.js/examples/js/controls/OrbitControls.js"></script>
+
+		<script>
+
+			var container;
+			var camera, scene, renderer;
+			var mouseX = 0, mouseY = 0;
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+      var clock = new THREE.Clock();
+			init();
+			animate();
+
+			function init() {
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+				camera.position.z = 300;
+
+				scene = new THREE.Scene();
+
+				var ambient = new THREE.AmbientLight( 0x444444 );
+				scene.add( ambient );
+
+				var directionalLight = new THREE.DirectionalLight( 0xffeedd );
+				directionalLight.position.set( 0, 50, 100 );
+				scene.add( directionalLight );
+
+				var directionalLight2 = new THREE.DirectionalLight( 0xffeedd );
+				directionalLight2.position.set( 0, 50, -100 );
+				scene.add( directionalLight2 );
+
+				// model
+				var onProgress = function ( xhr ) {
+					if ( xhr.lengthComputable ) {
+						var percentComplete = xhr.loaded / xhr.total * 100;
+						console.log( Math.round(percentComplete, 2) + '% downloaded' );
+            document.getElementById('info').textContent = Math.round(percentComplete, 2) + '% downloaded';
+					  if (Math.round(percentComplete, 2) == 100)
+              document.getElementById('info').textContent = '';
+					}
+				};
+
+				var onError = function ( xhr ) {document.getElementById('info').textContent = 'error?';};
+
+				var loader = new THREE.OBJMTLLoader();
+        loader.load( 'rose.obj', 'rose.mtl', function ( object ) {
+          object.position.X = 20;
+          object.position.y = 80;
+          object.rotation.z = 1.5;
+					scene.add( object );
+				}, onProgress, onError );
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+        renderer.setClearColor( 0x444444, 1);
+				container.appendChild( renderer.domElement );
+
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				window.addEventListener( 'resize', onWindowResize, false );
+
+        controls = new THREE.OrbitControls( camera, renderer.domElement );
+        //controls.center.set( 0, 300, 0);
+        controls.addEventListener( 'change', render );
+			}
+
+			function onWindowResize() {
+				windowHalfX = window.innerWidth / 2;
+				windowHalfY = window.innerHeight / 2;
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+
+			function onDocumentMouseMove( event ) {
+				mouseX = ( event.clientX - windowHalfX ) / 2;
+				mouseY = ( event.clientY - windowHalfY ) / 2;
+			}
+
+			function animate() {
+				requestAnimationFrame( animate );
+        controls.update();
+				render();
+			}
+
+			function render() {
+        var delta = 0.75 * clock.getDelta();
+        THREE.AnimationHandler.update(delta);
+				renderer.render( scene, camera );
+			}
+		</script>
+	</body>
+</html>
