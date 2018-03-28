@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<!-- three.js library -->
+<script src='vendor/three.js/build/three.min.js'></script>
+<script src="vendor/three.js/examples/js/libs/stats.min.js"></script>
+<!-- ar.js -->
+<script src="../build/ar.js"></script>
+<script>THREEx.ArToolkitContext.baseURL = '../'</script>
+
+<body style='margin : 0px; overflow: hidden; font-family: Arial; font-weight:bold; color: #b2d236;'>
+    <div style='position: absolute; top: 5px; left:40px; width:100%; text-align: center; z-index: 1;'>
+        POINT YOUR CAMERA<br />at the AR code
+    </div>
+    <div style='position: absolute; left: 80px; top: 0px; width:100%; z-index: 1;'>
+        <img src="../../data/images/arintouch_50x50.png" height="48" width="48" />
+    </div>
+    <script>
+
+        window.onload = function () {
+            
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////
+        //		Init
+        //////////////////////////////////////////////////////////////////////////////////
+
+        // init renderer
+        var renderer = new THREE.WebGLRenderer({
+            // antialias	: true,
+            alpha: true
+        });
+        renderer.setClearColor(new THREE.Color('lightgrey'), 0)
+        // renderer.setPixelRatio( 1/2 );
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.domElement.style.position = 'absolute'
+        renderer.domElement.style.top = '0px'
+        renderer.domElement.style.left = '0px'
+        document.body.appendChild(renderer.domElement);
+
+        // array of functions for the rendering loop
+        var onRenderFcts = [];
+
+        // init scene and camera
+        var scene = new THREE.Scene();
+
+        //////////////////////////////////////////////////////////////////////////////////
+        //		Initialize a basic camera
+        //////////////////////////////////////////////////////////////////////////////////
+
+        // Create a camera
+        var camera = new THREE.Camera();
+        scene.add(camera);
+
+        ////////////////////////////////////////////////////////////////////////////////
+        //          handle arToolkitSource
+        ////////////////////////////////////////////////////////////////////////////////
+
+        var arToolkitSource = new THREEx.ArToolkitSource({
+            // to read from the webcam
+            sourceType: 'webcam',
+
+            // to read from an image
+            // sourceType : 'image',
+            // sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/images/img.jpg',
+
+            // to read from a video
+            // sourceType : 'video',
+            // sourceUrl : THREEx.ArToolkitContext.baseURL + '../data/videos/headtracking.mp4',
+        })
+
+        arToolkitSource.init(function onReady() {
+            onResize()
+        })
+
+        // handle resize
+        window.addEventListener('resize', function () {
+            onResize()
+        })
+        function onResize() {
+            arToolkitSource.onResize()
+            arToolkitSource.copySizeTo(renderer.domElement)
+            if (arToolkitContext.arController !== null) {
+                arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////////////
+        //          initialize arToolkitContext
+        ////////////////////////////////////////////////////////////////////////////////
+
+
+        // create atToolkitContext
+        var arToolkitContext = new THREEx.ArToolkitContext({
+            cameraParametersUrl: THREEx.ArToolkitContext.baseURL + '../data/data/camera_para.dat',
+            detectionMode: 'mono',
+            maxDetectionRate: 30,
+            canvasWidth: 80 * 3,
+            canvasHeight: 60 * 3,
+        })
+        // initialize it
+        arToolkitContext.init(function onCompleted() {
+            // copy projection matrix to camera
+            camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
+
+            //not compatible with ios 11
+            //var audio = new Audio("https://raw.githubusercontent.com/jacobshepherd/jacobshepherd.github.io/master/ar/data/sound/eagle.mp3");
+            //audio.play();
+        })
+
+        // update artoolkit on every frame
+        onRenderFcts.push(function () {
+            if (arToolkitSource.ready === false) return
+
+            arToolkitContext.update(arToolkitSource.domElement)
+        })
+
+        // add marker found event
+        //arToolkitContext.addEventListener('markerFound', function (event) {
+        //    // this doesn't appear to work
+        //})
+
+        //if (document.querySelector("a-marker").object3D.visible == true) {
+        //    // play the sound
+        //    document.getElementById("my_audio").play();
+        //}
+
+
+        ////////////////////////////////////////////////////////////////////////////////
+        //          Create a ArMarkerControls
+        ////////////////////////////////////////////////////////////////////////////////
+
+        var markerRoot = new THREE.Group
+        scene.add(markerRoot)
+        var artoolkitMarker = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
+            type: 'pattern',
+            patternUrl: THREEx.ArToolkitContext.baseURL + '../data/data/patt.hiro'
+            // patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji'
+        })
+
+        // build a smoothedControls
+        var smoothedRoot = new THREE.Group()
+        scene.add(smoothedRoot)
+        var smoothedControls = new THREEx.ArSmoothedControls(smoothedRoot, {
+            lerpPosition: 0.4,
+            lerpQuaternion: 0.3,
+            lerpScale: 1,
+        })
+        onRenderFcts.push(function (delta) {
+            smoothedControls.update(markerRoot)
+        })
+
+        //===================================================== add Light
+        var light = new THREE.DirectionalLight(0xefefff, 1.5);
+        light.position.set(1, 1, 1).normalize();
+        scene.add(light);
+
+        var light = new THREE.DirectionalLight(0xffefef, 1.5);
+        light.position.set(-1, -1, -1).normalize();
+        scene.add(light);
+
+        //////////////////////////////////////////////////////////////////////////////////
+        //		add an object in the scene
+        //////////////////////////////////////////////////////////////////////////////////
+
+        var arWorldRoot = smoothedRoot
+
+        camera.position.z = 100;
+
+        var geometry = new THREE.SphereBufferGeometry(5, 32, 32);
+        var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+        var sphere = new THREE.Mesh(geometry, material);
+        arWorldRoot.add(sphere);
+
+
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(0, 0, 100);
+
+        scene.add(spotLight);
+
+        for (var i = 0; i < 4; i++) {
+            var geometry1 = new THREE.SphereBufferGeometry(2, 32, 32);
+            var material1 = new THREE.MeshLambertMaterial({ color: 0x0000ff });
+            var sphere1 = new THREE.Mesh(geometry1, material1);
+            sphere1.position.x = 10;
+            arWorldRoot.add(sphere1);
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////
+        //		render the whole thing on the page
+        //////////////////////////////////////////////////////////////////////////////////
+        var stats = new Stats();
+        document.body.appendChild(stats.dom);
+        // render the scene
+
+        var angle = 0;
+        var y = 10;
+        var flag = false;
+
+        onRenderFcts.push(function () {
+            r = 10;
+
+
+            arWorldRoot.children[5].position.y = 10 * Math.sin(angle);
+            arWorldRoot.children[5].position.x = 10 * Math.cos(angle);
+
+            arWorldRoot.children[4].position.x = 10 * Math.sin(angle);
+            arWorldRoot.children[4].position.z = 10 * Math.cos(angle);
+
+            arWorldRoot.children[3].position.y = 10 * Math.sin(Math.PI / 180 * 90);
+            arWorldRoot.children[3].position.x = 10 * Math.cos(Math.PI / 180 * 90);
+
+            arWorldRoot.children[3].position.z = 10 * Math.sin(angle);
+            arWorldRoot.children[3].position.y = 10 * Math.cos(angle);
+
+
+
+            arWorldRoot.children[2].position.x = 10 * Math.sin(angle);
+            arWorldRoot.children[2].position.y = 10 * Math.cos(angle);
+
+            console.log(flag);
+
+            angle += Math.PI / 180 * 3;
+
+            renderer.render(scene, camera);
+            stats.update();
+        })
+
+        // run the rendering loop
+        var lastTimeMsec = null
+        requestAnimationFrame(function animate(nowMsec) {
+            // keep looping
+            requestAnimationFrame(animate);
+            // measure time
+            lastTimeMsec = lastTimeMsec || nowMsec - 1000 / 60
+            var deltaMsec = Math.min(200, nowMsec - lastTimeMsec)
+            lastTimeMsec = nowMsec
+            // call each update function
+            onRenderFcts.forEach(function (onRenderFct) {
+                onRenderFct(deltaMsec / 1000, nowMsec / 1000)
+            })
+        })
+    </script>
+</body>
