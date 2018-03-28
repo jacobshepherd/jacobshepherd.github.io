@@ -1,0 +1,254 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Bentley Colour Changer</title>
+    <style>
+    body {
+        background-image: linear-gradient(to bottom, #cee4ff, #fff3e1);
+        margin: 0px;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="container">
+                <span class="btn-navheader">Bentley Demo - Mouse + Click + Hold to rotate scene</span>
+                <a id="red-button" href="#" class="btn pause btn-navbar">Red</a>
+                <a id="black-button" href="#" class="btn start btn-navbar">Black</a>
+                <a id="blue-button" href="#" class="btn start btn-navbar">Blue</a>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
+<script src="js/three.js"></script>
+<script type="text/javascript" src="js/OrbitControlsRR.js"></script>
+
+<script type="text/javascript">
+var renderer, camera, controls, scene, objMesh, textureCube;
+
+init();
+animate();
+
+function init() {
+
+    // create the scene
+    scene = new THREE.Scene();
+
+    // create the renderer
+    renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMapEnabled = true;
+    renderer.shadowMapSoft = true;
+    renderer.shadowMapType = THREE.PCFSoftShadowMap;
+    document.body.appendChild(renderer.domElement);
+
+    document.getElementById("red-button").addEventListener('click', red);
+    document.getElementById("black-button").addEventListener('click', black);
+    document.getElementById("blue-button").addEventListener('click', blue);
+
+
+    // create and add the camera
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+    camera.lookAt(scene.position);
+    camera.position.z = 500;
+    camera.position.y = 30;
+    scene.add(camera);
+
+    // add in the orbit controls
+    controls = new THREE.OrbitControlsRR(camera);
+    controls.maxPolarAngle = Math.PI / 2 - (10 * Math.PI / 180);
+    controls.minPolarAngle = Math.PI / 2 - (40 * Math.PI / 180);
+    controls.addEventListener('change', render);
+
+    var urls = ["images/px.jpg", "images/nx.jpg",
+        "images/py.jpg", "images/ny.jpg",
+        "images/pz.jpg", "images/nz.jpg"
+    ];
+
+    textureCube = THREE.ImageUtils.loadTextureCube(urls);
+    textureCube.format = THREE.RGBFormat;
+
+    var textureCubeRefraction = THREE.ImageUtils.loadTextureCube(urls, new THREE.CubeRefractionMapping(), render);
+
+    var glass = new THREE.MeshPhongMaterial({
+        color: 0x223344,
+        opacity: 0.25,
+        transparent: true,
+        envMap: textureCube,
+        combine: THREE.MixOperation,
+        reflectivity: 0.25
+    });
+
+    var chromeBodyMaterial = new THREE.MeshLambertMaterial({
+        color: 0xffffff,
+        specular: 0xffffff,
+        envMap: textureCube,
+        combine: THREE.Multiply
+    });
+
+    var windowMaterial = new THREE.MeshPhongMaterial({
+        color: 0x223344,
+        shading: THREE.SmoothShading,
+        shininess: 50,
+        specular: 0xffffff,
+        reflectivity: 0.7,
+        envMap: textureCube,
+        combine: THREE.MixOperation
+    });
+
+    var lampGlass = new THREE.MeshPhongMaterial({
+        color: 0xffffff,
+        envMap: textureCubeRefraction,
+        refractionRatio: 0.6,
+        reflectivity: 0.9,
+        transparent: true,
+        opacity: 0.5
+    });
+    lampGlass.needsUpdate = true;
+
+    //Add an object!
+    var loader = new THREE.JSONLoader(),
+        callbackModel = function(geometry, materials) {
+            objMesh = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(materials));
+            objMesh.position.set(0, 80, 0);
+            objMesh.scale.set(0.5, 0.5, 0.5);
+            objMesh.rotation.x = -Math.PI / 2;
+            objMesh.material.materials[0] = chromeBodyMaterial;
+            objMesh.material.materials[3] = windowMaterial;
+            objMesh.material.materials[6] = lampGlass;
+            objMesh.castShadow = true;
+            scene.add(objMesh);
+        };
+    loader.load('models/bcgt/bcgt.js', callbackModel);
+
+    // note: 4x4 checkboard pattern scaled so that each square is 25 by 25 pixels.
+    var floorTexture = new THREE.ImageUtils.loadTexture('images/f01.jpg');
+    floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+    floorTexture.repeat.set(10, 10);
+    // DoubleSide: render texture on both sides of mesh
+    var floorMaterial = new THREE.MeshPhongMaterial({
+        map: floorTexture,
+        specular: 0x404040,
+        side: THREE.DoubleSide
+    });
+    var floorGeometry = new THREE.PlaneGeometry(1100, 1100, 1, 1);
+    var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    floor.position.y = -0.5;
+    floor.receiveShadow = true;
+    floor.rotation.x = Math.PI / 2;
+    scene.add(floor);
+
+    var floorOverlayTexture = new THREE.ImageUtils.loadTexture('images/fs01.png');
+    // DoubleSide: render texture on both sides of mesh
+    var floorOverlayMaterial = new THREE.MeshBasicMaterial({
+        map: floorOverlayTexture,
+        transparent: true,
+        side: THREE.DoubleSide
+    });
+    var floorOverlayGeometry = new THREE.PlaneGeometry(1100, 1100, 1, 1);
+    var floorOverlay = new THREE.Mesh(floorOverlayGeometry, floorOverlayMaterial);
+    floorOverlay.position.y = -0.5;
+    floorOverlay.receiveShadow = true;
+    floorOverlay.rotation.x = Math.PI / 2;
+    scene.add(floorOverlay);
+
+    var dl = new THREE.DirectionalLight(0xffffff, 1);
+    dl.position.set(0, 350, 0);
+    //dl.shadowCameraVisible = true;
+    dl.castShadow = true;
+    dl.shadowMapWidth = 1024; // default is 512
+    dl.shadowMapHeight = 1024;
+    scene.add(dl);
+
+    var light = new THREE.AmbientLight(0x404040); // soft white light
+    scene.add(light);
+
+    //addDatGui();
+
+}
+
+function animate() {
+
+    requestAnimationFrame(animate);
+    render();
+
+}
+
+function addDatGui() {
+    var gui = new dat.GUI();
+
+    gui.add(camera.position, 'x', -500, 500).step(5);
+    gui.add(camera.position, 'y', -500, 500).step(5);
+    gui.add(camera.position, 'z', -500, 500).step(5);
+
+    gui.add(camera.rotation, 'x', -Math.PI, Math.PI).step(0.1);
+    gui.add(camera.rotation, 'y', -Math.PI, Math.PI).step(0.1);
+    gui.add(camera.rotation, 'z', -Math.PI, Math.PI).step(0.1);
+
+
+}
+
+function red() {
+
+    //var material = new THREE.MeshPhongMaterial( { color: 0xff0000, shading: THREE.SmoothShading, shininess: 30, specular: 0xffffff, reflectivity: 0.5 } );
+
+    var material = new THREE.MeshPhongMaterial({
+        color: 0xff0000,
+        shading: THREE.SmoothShading,
+        shininess: 30,
+        specular: 0xffaaaa,
+        reflectivity: 0.7,
+        envMap: textureCube,
+        combine: THREE.Multiply
+    });
+
+    objMesh.material.materials[0] = material;
+
+}
+
+function black() {
+
+    var material = new THREE.MeshPhongMaterial({
+        color: 0x000000,
+        shading: THREE.SmoothShading,
+        shininess: 30,
+        specular: 0xaaaaaa,
+        reflectivity: 0.7,
+        envMap: textureCube,
+        combine: THREE.Multiply
+    });
+
+    objMesh.material.materials[0] = material;
+
+
+}
+
+function blue() {
+
+    var material = new THREE.MeshPhongMaterial({
+        color: 0x0000ff,
+        shading: THREE.SmoothShading,
+        shininess: 30,
+        specular: 0xaaaaff,
+        reflectivity: 0.7,
+        envMap: textureCube,
+        combine: THREE.Multiply
+    });
+
+    objMesh.material.materials[0] = material;
+
+}
+
+// draw!
+
+function render() {
+    renderer.render(scene, camera);
+}
+</script>
+
+</html>

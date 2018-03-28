@@ -1,0 +1,230 @@
+newmtl beveled
+Ka 0 0 0
+Kd 0.0784314 0.0901961 0.141176
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl black
+Ka 0 0 0
+Kd 0.321569 0.321569 0.321569
+Ks 0.04 0.04 0.04
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl black_gloss
+Ka 0 0 0
+Kd 0.0784314 0.0901961 0.141176
+Ks 0.28 0.28 0.28
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl caliper
+Ka 0 0 0
+Kd 0.235294 0.235294 0.235294
+Ks 0.255 0.255 0.255
+Ni 1
+Ns 289
+Tf 1 1 1
+d 1
+
+newmtl Default
+Ka 0 0 0
+Kd 0.54902 0.54902 0.54902
+Ks 0.575 0.575 0.575
+Ni 1
+Ns 254
+Tf 1 1 1
+d 1
+
+newmtl Default_dark
+Ka 0 0 0
+Kd 0.682353 0.513726 0.4
+Ks 0.39 0.39 0.39
+Ni 1
+Ns 250
+Tf 1 1 1
+d 1
+
+newmtl Default_int
+Ka 0 0 0
+Kd 0.666667 0.407843 0.176471
+Ks 0.58 0.58 0.58
+Ni 1
+Ns 254
+Tf 1 1 1
+d 1
+
+newmtl Default_int_dark
+Ka 0 0 0
+Kd 0.682353 0.513726 0.4
+Ks 0.23 0.23 0.23
+Ni 1
+Ns 294
+Tf 1 1 1
+d 1
+
+newmtl HL_Al
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0.575 0.575 0.575
+Ni 1
+Ns 250
+Tf 1 1 1
+d 1
+
+newmtl HL_glass
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0.04 0.04 0.04
+Ni 1
+Ns 400
+Tf 1 1 1
+d 0.445
+
+newmtl HL_lens
+Ka 0 0 0
+Kd 0.0784314 0.0901961 0.141176
+Ks 0.12 0.12 0.12
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl HL_red
+Ka 0 0 0
+Kd 0.6 0.223529 0.235294
+Ks 0.175 0.175 0.175
+Ni 1
+Ns 400
+Tf 1 1 1
+d 0.675
+
+newmtl inox
+Ka 0 0 0
+Kd 0.752941 0.752941 0.752941
+Ks 0.27 0.27 0.27
+Ni 1
+Ns 670
+Tf 1 1 1
+d 1
+
+newmtl interior
+Ka 0 0 0
+Kd 0.666667 0.407843 0.176471
+Ks 0.58 0.58 0.58
+Ni 1
+Ns 254
+Tf 1 1 1
+d 1
+
+newmtl M_glass
+Ka 0 0 0
+Kd 0.2 0.423529 0.45098
+Ks 0.325 0.325 0.325
+Ni 1
+Ns 639
+Tf 0.62 0.62 0.62
+d 0.485
+
+newmtl M_grid
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd MAP_grille.jpg
+
+newmtl M_logo
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0.505 0.505 0.505
+Ni 1
+Ns 474
+Tf 1 1 1
+d 1
+map_Kd M_logo.jpg
+
+newmtl M_plate
+Ka 0 0 0
+Kd 0.886275 0.886275 0.886275
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_Kd M_logo.jpg
+
+newmtl M_tires
+Ka 0 0 0
+Kd 0.247059 0.247059 0.247059
+Ks 0.26 0.26 0.26
+Ni 1
+Ns 319
+Tf 1 1 1
+d 1
+map_Kd Map_tires.jpg
+
+newmtl M_tires_side
+Ka 0 0 0
+Kd 0.247059 0.247059 0.247059
+Ks 0.26 0.26 0.26
+Ni 1
+Ns 319
+Tf 1 1 1
+d 1
+map_Kd M_tire_side.jpg
+
+newmtl mirror
+Ka 0 0 0
+Kd 0.423529 0.658824 0.67451
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl red
+Ka 0 0 0
+Kd 0.956863 0.0156863 0.0431373
+Ks 0.165 0.165 0.165
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl tires
+Ka 0 0 0
+Kd 0.270588 0.266667 0.282353
+Ks 0.755 0.755 0.755
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl wheel
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 1.4 1.4 1.4
+Ni 1
+Ns 200
+Tf 1 1 1
+d 1
+
+newmtl wood
+Ka 0 0 0
+Kd 0.717647 0.356863 0
+Ks 0.665 0.665 0.665
+Ni 1
+Ns 280
+Tf 1 1 1
+d 1
+
