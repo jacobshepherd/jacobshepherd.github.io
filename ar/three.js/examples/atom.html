@@ -132,7 +132,7 @@
         scene.add(markerRoot)
         var artoolkitMarker = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
             type: 'pattern',
-            patternUrl: THREEx.ArToolkitContext.baseURL + '../data/data/patt.hiro'
+            patternUrl: THREEx.ArToolkitContext.baseURL + '../data/data/patt.intoucharnapa'
             // patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji'
         })
 
@@ -163,7 +163,7 @@
 
         var arWorldRoot = smoothedRoot
 
-        camera.position.z = 100;
+        //camera.position.z = 100;
 
         var geometry = new THREE.SphereBufferGeometry(5, 32, 32);
         var material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
