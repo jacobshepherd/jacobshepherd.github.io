@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<head>
+
+<title>Drinking Bird</title>
+
+<script src="./../mrdoob-threejs/build/three.min.js"></script>
+<script src="./../cs291-master/lib/Coordinates.js"></script>
+<script src="./js/OrbitAndPanControlsYann.js"></script>
+<script src="./js/tubeTry.js"></script>
+<script src="./js/drinkBird.js"></script>
+
+
+</head>
+<body>
+<div id="container">
+<canvas>
+</canvas>
+</div>
+
+<script type="text/javascript">
+////////////////////////////////////////////////////////////////////////////////
+// Make a drinking bird
+////////////////////////////////////////////////////////////////////////////////
+/*global THREE, Coordinates, document, window, dat*/
+
+var camera, scene, renderer;
+var cameraControls, effectController;
+var clock = new THREE.Clock();
+var axes = true;
+var ground = true;
+var rSeg = 32;
+var hSeg = 16;
+
+
+function drawBird() {
+	var bird1 = new DrinkBird(true, true);
+	bird1.createBird();
+	scene.add(bird1.model);	
+}
+
+
+
+
+function fillScene() {
+	scene = new THREE.Scene();
+
+	scene.add( new THREE.AmbientLight( 0x333333) );
+
+	var light1 = new THREE.DirectionalLight( 0xffffff, 0.9 );
+	light1.position.set( 200, 500, 500 );
+
+	
+	var light2 = new THREE.DirectionalLight( 0xdddddd, 0.7 );
+	light2.position.set( -200, -100, -400 );
+
+	scene.add(light1);
+	scene.add(light2);
+	
+	Coordinates.drawGrid({size: 500});
+	//Coordinates.drawAllAxes({axisLength: 100, axisRadius: 1});
+	
+	drawBird();
+}
+
+
+function init() {
+	var canvasWidth = 846; 
+	var canvasHeight = 494;
+	var canvasRatio = canvasWidth / canvasHeight;
+
+	// RENDERER
+	renderer = new THREE.WebGLRenderer( { antialias: false } );
+	renderer.gammaInput = true;
+	renderer.gammaOutput = true;
+	renderer.setSize(canvasWidth, canvasHeight);
+	renderer.setClearColor( 0xAAAAAA, 1.0 );
+
+	// CAMERA
+	camera = new THREE.PerspectiveCamera( 38, canvasRatio, 1, 10000 );
+	// CONTROLS
+	cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
+	camera.position.set(-400, 450, 300);
+	cameraControls.target.set(10,150,10);
+
+}
+
+function addToDOM() {
+    var container = document.getElementById('container');
+    var canvas = container.getElementsByTagName('canvas');
+    if (canvas.length>0) {
+        container.removeChild(canvas[0]);
+    }
+    container.appendChild( renderer.domElement );
+}
+
+
+function animate() {
+	window.requestAnimationFrame(animate);
+	render();
+}
+
+function render() {
+    var delta = clock.getDelta();
+	cameraControls.update(delta);
+
+	renderer.render(scene, camera);
+}
+
+
+
+
+
+// this is the main action sequence
+init();
+fillScene();
+addToDOM();
+animate();
+
+
+</script>
+
+
+
+
+</body>
+</html>
