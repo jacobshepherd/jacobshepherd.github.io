@@ -163,38 +163,95 @@
 
         var arWorldRoot = smoothedRoot
 
-        var mixer;
-        var mesh;
-        var loader3 = new THREE.JSONLoader();
-        loader3.load(
-            "https://raw.githubusercontent.com/baronwatts/models/master/eagle.js",
-            function (geometry) {
-                mesh = new THREE.Mesh(
-                    geometry,
-                    new THREE.MeshLambertMaterial({
-                        vertexColors: THREE.FaceColors,
-                        morphTargets: true
-                    })
-                );
-                mesh.scale.set(0.0175, 0.0175, 0.0175);
-                //mesh.rotateY(Math.PI);
-                mesh.rotateZ(45);
-                //mesh.rotateY(-25);
-                mesh.rotateX(-90);
-                arWorldRoot.add(mesh);
 
-                mixer = new THREE.AnimationMixer(mesh);
-                var clip = THREE.AnimationClip.CreateFromMorphTargetSequence(
-                    "gallop",
-                    geometry.morphTargets,
-                    60
-                );
-                mixer
-                    .clipAction(clip)
-                    .setDuration(1)
-                    .play();
+        var PI2 = Math.PI * 2;
+
+        var material = new THREE.SpriteCanvasMaterial({
+
+
+
+            color: 0xffffff,
+
+            program: function (context) {
+
+
+
+                context.beginPath();
+
+                context.arc(0, 0, 0.5, 0, PI2, true);
+
+                context.fill();
+
+
+
             }
-        );
+
+
+
+        });
+
+
+
+        for (var i = 0; i < 1000; i++) {
+
+
+
+            particle = new THREE.Sprite(material);
+
+            particle.position.x = Math.random() * 2 - 1;
+
+            particle.position.y = Math.random() * 2 - 1;
+
+            particle.position.z = Math.random() * 2 - 1;
+
+            particle.position.normalize();
+
+            particle.position.multiplyScalar(Math.random() * 10 + 450);
+
+            particle.scale.multiplyScalar(2);
+
+            scene.add(particle);
+
+
+
+        }
+
+
+        for (var i = 0; i < 300; i++) {
+
+
+
+            var geometry = new THREE.Geometry();
+
+
+
+            var vertex = new THREE.Vector3(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1);
+
+            vertex.normalize();
+
+            vertex.multiplyScalar(450);
+
+
+
+            geometry.vertices.push(vertex);
+
+
+
+            var vertex2 = vertex.clone();
+
+            vertex2.multiplyScalar(Math.random() * 0.3 + 1);
+
+
+
+            geometry.vertices.push(vertex2);
+
+
+
+            var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xffffff, opacity: Math.random() }));
+
+            scene.add(line);
+
+        }
 
         //////////////////////////////////////////////////////////////////////////////////
         //		render the whole thing on the page
@@ -206,11 +263,7 @@
         var prevTime = Date.now();
 
         onRenderFcts.push(function () {
-            if (mixer) {
-                let time = Date.now();
-                mixer.update((time - prevTime) * 0.001);
-                prevTime = time;
-            }
+
 
             renderer.render(scene, camera);
             stats.update();
