@@ -380,7 +380,7 @@
             "Uuo", "Ununoctium", "(294)", 18, 7
         ];
 
-        var renderer;
+        var cssRenderer; 
         var controls;
 
         var objects = [];
@@ -497,10 +497,10 @@
 
             //
 
-            renderer = new THREE.CSS3DRenderer();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.domElement.style.position = 'absolute';
-            document.getElementById('container').appendChild(renderer.domElement);
+            cssRenderer = new THREE.CSS3DRenderer();
+            cssRenderer.setSize(window.innerWidth, window.innerHeight);
+            cssRenderer.domElement.style.position = 'absolute';
+            document.getElementById('container').appendChild(cssRenderer.domElement);
 
             //
 
@@ -597,7 +597,7 @@
 
         function render() {
 
-            renderer.render(scene, camera);
+            cssRenderer.render(scene, camera);
 
         }
 
