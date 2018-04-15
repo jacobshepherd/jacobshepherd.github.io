@@ -141,8 +141,10 @@
         //////////////////////////////////////////////////////////////////////////////////
 
         // Create a camera
-        var camera = new THREE.Camera();
+        var camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
+        camera.position.z = 3000;
         scene.add(camera);
+
 
         ////////////////////////////////////////////////////////////////////////////////
         //          handle arToolkitSource
@@ -378,7 +380,7 @@
             "Uuo", "Ununoctium", "(294)", 18, 7
         ];
 
-        var camera, scene, renderer;
+        var renderer;
         var controls;
 
         var objects = [];
@@ -389,10 +391,7 @@
 
         function init() {
 
-            camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
-            camera.position.z = 3000;
-
-            scene = new THREE.Scene();
+            
 
             // table
 
