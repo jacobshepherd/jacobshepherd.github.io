@@ -258,6 +258,11 @@
 
         var arWorldRoot = smoothedRoot
 
+        var cssRenderer;
+        var controls;
+
+        var objects = [];
+        var targets = { table: [], sphere: [], helix: [], grid: [] };
 
         var table = [
             "H", "Hydrogen", "1.00794", 1, 1,
@@ -380,11 +385,7 @@
             "Uuo", "Ununoctium", "(294)", 18, 7
         ];
 
-        var cssRenderer; 
-        var controls;
 
-        var objects = [];
-        var targets = { table: [], sphere: [], helix: [], grid: [] };
 
         init();
         animate();
