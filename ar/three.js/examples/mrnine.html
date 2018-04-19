@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-<script src="build/ar.js"></script>
-<script src='build/three.min.js'></script>
-<script src="js/libs/stats.min.js"></script>
-<script src="js/libs/inflate.min.js"></script>
-<script src="js/loaders/FBXLoader.js"></script>
-<script src="js/controls/OrbitControls.js"></script>
-<script src="js/Detector.js"></script>
+<!-- three.js library -->
+<script src='vendor/three.js/build/three.min.js'></script>
+<script src="vendor/three.js/examples/js/libs/stats.min.js"></script>
+<!-- ar.js -->
+<script src="../build/ar.js"></script>
 
-<script>THREEx.ArToolkitContext.baseURL = '../mrnine/'</script>
+<script src="vendor/three.js/examples/js/libs/inflate.min.js"></script>
+<script src="vendor/three.js/examples/js/loaders/FBXLoader.js"></script>
+<script src="vendor/three.js/examples/js/controls/OrbitControls.js"></script>
+<script src="vendor/three.js/examples/js/Detector.js"></script>
+
+<script>THREEx.ArToolkitContext.baseURL = '../'</script>
 
 <body style='margin : 0px; overflow: hidden; font-family: Arial; font-weight:bold; color: #b2d236;'>
     <div style='position: absolute; top: 5px; left:40px; width:100%; text-align: center; z-index: 1;'>
-        POINT YOUR CAMERA<br />at the AR code.
+        POINT YOUR CAMERA<br />at the AR code
     </div>
     <div style='position: absolute; left: 80px; top: 0px; width:100%; z-index: 1;'>
-        <img src="data/images/ar_50x50.png" height="48" width="48" />
+        <img src="../../data/images/arintouch_50x50.png" height="48" width="48" />
     </div>
     <script>
 
@@ -93,7 +96,7 @@
 
         // create atToolkitContext
         var arToolkitContext = new THREEx.ArToolkitContext({
-            cameraParametersUrl: THREEx.ArToolkitContext.baseURL + 'data/data/camera_para.dat',
+            cameraParametersUrl: THREEx.ArToolkitContext.baseURL + '../data/data/camera_para.dat',
             detectionMode: 'mono',
             maxDetectionRate: 30,
             canvasWidth: 80 * 3,
@@ -135,7 +138,7 @@
         scene.add(markerRoot)
         var artoolkitMarker = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
             type: 'pattern',
-            patternUrl: THREEx.ArToolkitContext.baseURL + 'data/data/patt.intoucharnapa'
+            patternUrl: THREEx.ArToolkitContext.baseURL + '../data/data/patt.intoucharnapa'
             // patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji'
         })
 
