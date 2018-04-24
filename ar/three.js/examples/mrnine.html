@@ -83,6 +83,12 @@
         grid.material.transparent = true;
         scene.add(grid);
 
+        var clock = new THREE.Clock();
+
+        var fbxObject;
+        var mixers = [];
+        var action;
+
         //////////////////////////////////////////////////////////////////////////////////
         //		Initialize a basic camera
         //////////////////////////////////////////////////////////////////////////////////
@@ -227,6 +233,32 @@
             scene.add(fbxObject);
         });
 
+        function animateFBX(event) {
+            if (event == "play") {
+                document.getElementById('btnPlay').disabled = true;
+                document.getElementById('btnPause').disabled = false;
+                action.paused = false;
+            } else if (event == "pause") {
+                document.getElementById('btnPause').disabled = true;
+                document.getElementById('btnPlay').disabled = false;
+                action.paused = true;
+            } else if (event == "breathing") {
+                document.getElementById('btnBreathing').disabled = true;
+                document.getElementById('btnJumping').disabled = false;
+                action.paused = true;
+                action = mixers[0].clipAction(fbxObject.animations[0]);
+                action.play();
+                action.paused = false;
+            } else if (event == "jumping") {
+                document.getElementById('btnJumping').disabled = true;
+                document.getElementById('btnBreathing').disabled = false;
+                action.paused = true;
+                action = mixers[0].clipAction(fbxObject.animations[1]);
+                action.play();
+                action.paused = false;
+            }
+        }
+
         //////////////////////////////////////////////////////////////////////////////////
         //		render the whole thing on the page
         //////////////////////////////////////////////////////////////////////////////////
@@ -238,6 +270,11 @@
 
         onRenderFcts.push(function () {
             //todo mixer code here
+            if (mixers.length > 0) {
+                for (var i = 0; i < mixers.length; i++) {
+                    mixers[i].update(clock.getDelta());
+                }
+            }
 
             renderer.render(scene, camera);
             stats.update();
