@@ -49,11 +49,7 @@
         // init scene and camera
         var scene = new THREE.Scene();
 
-        var controls = new THREE.OrbitControls(camera);
-        controls.target.set(0, 100, 0);
-        controls.update();
-
-        scene = new THREE.Scene();
+        //scene = new THREE.Scene();
         scene.background = new THREE.Color(0xa0a0a0);
         scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000);
 
@@ -97,6 +93,10 @@
         var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(100, 200, 300);
         scene.add(camera);
+
+        var controls = new THREE.OrbitControls(camera);
+        controls.target.set(0, 100, 0);
+        controls.update();
 
         ////////////////////////////////////////////////////////////////////////////////
         //          handle arToolkitSource
