@@ -69,15 +69,15 @@
         //scene.add( new THREE.CameraHelper( light.shadow.camera ) );
 
         // ground
-        var mesh = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000), new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false }));
-        mesh.rotation.x = - Math.PI / 2;
-        mesh.receiveShadow = true;
-        scene.add(mesh);
+        //var mesh = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000), new THREE.MeshPhongMaterial({ color: 0x999999, depthWrite: false }));
+        //mesh.rotation.x = - Math.PI / 2;
+        //mesh.receiveShadow = true;
+        //scene.add(mesh);
 
-        var grid = new THREE.GridHelper(2000, 20, 0x000000, 0x000000);
-        grid.material.opacity = 0.2;
-        grid.material.transparent = true;
-        scene.add(grid);
+        //var grid = new THREE.GridHelper(2000, 20, 0x000000, 0x000000);
+        //grid.material.opacity = 0.2;
+        //grid.material.transparent = true;
+        //scene.add(grid);
 
         var clock = new THREE.Clock();
 
@@ -230,7 +230,7 @@
                 }
             });
 
-            scene.add(fbxObject);
+            arWorldRoot.add(fbxObject);
         });
 
         function animateFBX(event) {
