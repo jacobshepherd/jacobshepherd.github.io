@@ -15,7 +15,7 @@
 
 <body style='margin : 0px; overflow: hidden; font-family: Arial; font-weight:bold; color: #b2d236;'>
     <div style='position: absolute; top: 5px; left:40px; width:100%; text-align: center; z-index: 1;'>
-        POINT YOUR CAMERA<br />at the AR code...
+        POINT YOUR CAMERA<br />at the AR code
     </div>
     <div style='position: absolute; left: 80px; top: 0px; width:100%; z-index: 1;'>
         <img src="../../data/images/arintouch_50x50.png" height="48" width="48" />
@@ -53,9 +53,9 @@
         scene.background = new THREE.Color(0xa0a0a0);
         //scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000);
 
-        //var light = new THREE.HemisphereLight(0xffffff, 0x444444);
-        //light.position.set(0, 400, 0);
-        //scene.add(light);
+        var light = new THREE.HemisphereLight(0xffffff, 0x444444);
+        light.position.set(0, 400, 0);
+        scene.add(light);
 
         //light = new THREE.DirectionalLight(0xffffff);
         //light.position.set(0, 400, 100);
@@ -65,14 +65,6 @@
         //light.shadow.camera.left = -120;
         //light.shadow.camera.right = 120;
         //scene.add(light);
-
-        var light = new THREE.DirectionalLight(0xefefff, 1.5);
-        light.position.set(1, 1, 1).normalize();
-        scene.add(light);
-
-        var light = new THREE.DirectionalLight(0xffefef, 1.5);
-        light.position.set(-1, -1, -1).normalize();
-        scene.add(light);
 
         //scene.add( new THREE.CameraHelper( light.shadow.camera ) );
 
