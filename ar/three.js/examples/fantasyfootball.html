@@ -20,7 +20,7 @@
         function toggleVideoPlay() {
             console.log('toggleVideoPlay');
 
-            var videoEleToggle = document.getElementById("myVideoEle");
+            var videoEleToggle = window.videoEle;
 
             if (videoEleToggle) {
                 console.log('found video');
@@ -195,6 +195,8 @@
         videoEle.loop = true;
 
         videoEle.load();
+
+        window.videoEle = videoEle; 
 
         var videoImage = document.createElement("canvas");
         videoImage.style.backgroundColor = "transparent";
