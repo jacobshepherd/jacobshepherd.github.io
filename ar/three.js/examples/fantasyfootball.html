@@ -9,7 +9,7 @@
 
 <body style='margin : 0px; overflow: hidden; font-family: Arial; font-weight:bold; color: #b2d236;' onclick="toggleVideoPlay()">
     <div style='position: absolute; top: 5px; left:40px; width:100%; text-align: center; z-index: 1;'>
-        POINT YOUR CAMERA<br />at the AR code 192/80
+        POINT YOUR CAMERA<br />at the AR code 240/100
     </div>
     <div style='position: absolute; left: 80px; top: 0px; width:100%; z-index: 1;'>
         <img src="../../data/images/arintouch_50x50.png" height="48" width="48" />
@@ -20,7 +20,7 @@
         function toggleVideoPlay() {
             console.log('toggleVideoPlay');
 
-            var videoEleToggle = document.querySelector("video");
+            var videoEleToggle = document.getElementById("myVideoEle");
 
             if (videoEleToggle) {
                 console.log('found video');
@@ -188,6 +188,7 @@
 
 
         var videoEle = document.createElement("video");
+        videoEle.id = 'myVideoEle';
         videoEle.src = "static/video/ai_the_patient_journey.mp4";
         videoEle.setAttribute("playsinline", "true");
         videoEle.autoplay = true;
@@ -213,7 +214,7 @@
             map: videoTexture, side: THREE.DoubleSide
         });
 
-        var movieGeometry = new THREE.PlaneGeometry(192, 80, 4, 4);
+        var movieGeometry = new THREE.PlaneGeometry(240, 100, 4, 4);
 
         var movieScreen = new THREE.Mesh(movieGeometry, movieMaterial);
         movieScreen.position.set(0, 50, 0);
