@@ -9,7 +9,7 @@
 
 <body style='margin : 0px; overflow: hidden; font-family: Arial; font-weight:bold; color: #b2d236;' onclick="toggleVideoPlay()">
     <div style='position: absolute; top: 5px; left:40px; width:100%; text-align: center; z-index: 1;'>
-        POINT YOUR CAMERA<br />at the AR code geo: 120, 50 pos: 0,25,0.
+        POINT YOUR CAMERA<br />at the AR code geo: 24, 10 pos: 0,5,0.
     </div>
     <div style='position: absolute; left: 80px; top: 0px; width:100%; z-index: 1;'>
         <img src="../../data/images/arintouch_50x50.png" height="48" width="48" />
@@ -216,10 +216,10 @@
             map: videoTexture, side: THREE.DoubleSide
         });
 
-        var movieGeometry = new THREE.PlaneGeometry(120, 50, 4, 4);
+        var movieGeometry = new THREE.PlaneGeometry(24, 10, 4, 4);
 
         var movieScreen = new THREE.Mesh(movieGeometry, movieMaterial);
-        movieScreen.position.set(0, 25, 0);
+        movieScreen.position.set(0, 5, 0);
 
         arWorldRoot.add(movieScreen);
         //scene.add(movieScreen);
