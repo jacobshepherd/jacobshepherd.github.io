@@ -9,7 +9,7 @@
 
 <body style='margin : 0px; overflow: hidden; font-family: Arial; font-weight:bold; color: #b2d236;' onclick="toggleVideoPlay()">
     <div style='position: absolute; top: 5px; left:40px; width:100%; text-align: center; z-index: 1;'>
-        POINT YOUR CAMERA<br />at the AR code.
+        POINT YOUR CAMERA<br />at the AR code :D
     </div>
     <div style='position: absolute; left: 80px; top: 0px; width:100%; z-index: 1;'>
         <img src="../../data/images/arintouch_50x50.png" height="48" width="48" />
@@ -22,12 +22,13 @@
 
             if (videoEleToggle) {
                 console.log('found video');
+                console.log('paused: ' + videoEleToggle.paused);
                 if (videoEleToggle.paused === false) {
-                    console.log('video playing');
+                    console.log('pausing video');
                     videoEleToggle.pause();
                 }
                 else {
-                    console.log('video paused');
+                    console.log('playing video');
                     videoEleToggle.play();
                 }
             }
@@ -207,7 +208,7 @@
             map: videoTexture, side: THREE.DoubleSide
         });
 
-        var movieGeometry = new THREE.PlaneGeometry(120, 50, 2, 2);
+        var movieGeometry = new THREE.PlaneGeometry(240, 100, 4, 4);
 
         var movieScreen = new THREE.Mesh(movieGeometry, movieMaterial);
         movieScreen.position.set(0, 50, 0);
