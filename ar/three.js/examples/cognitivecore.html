@@ -2,6 +2,7 @@
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 <!-- three.js library -->
 <script src='vendor/three.js/build/three.min.js'></script>
+<script src="vendor/three.js/examples/js/loaders/GLTF2Loader.js"></script>
 <script src="vendor/three.js/examples/js/libs/stats.min.js"></script>
 <!-- ar.js -->
 <script src="../build/ar.js"></script>
@@ -9,7 +10,7 @@
 
 <body style='margin : 0px; overflow: hidden; font-family: Arial; font-weight:bold; color: #b2d236;'>
     <div style='position: absolute; top: 5px; left:40px; width:100%; text-align: center; z-index: 1;'>
-        POINT YOUR CAMERA<br />at the AR code - need link to > bit.ly/CognitiveCore
+        POINT YOUR CAMERA<br />at the AR code: need link to >> bit.ly/CognitiveCore
     </div>
     <div style='position: absolute; left: 80px; top: 0px; width:100%; z-index: 1;'>
         <img src="../../data/images/arintouch_50x50.png" height="48" width="48" />
@@ -173,7 +174,7 @@
 
         // load gltf model and texture                            
         const objs = [];
-        const loader = new THREE.GLTFLoader();
+        const loader = new THREE.GLTF2Loader();
         loader.load("models/cognitivecore.glb", 
             function (gltf) {
 
