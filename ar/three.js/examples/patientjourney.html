@@ -2,6 +2,7 @@
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 <!-- three.js library -->
 <script src='vendor/three.js/build/three.min.js'></script>
+<script src="vendor/three.js/examples/js/loaders/GLTF2Loader.js"></script>
 <script src="vendor/three.js/examples/js/libs/stats.min.js"></script>
 <!-- ar.js -->
 <script src="../build/ar.js"></script>
@@ -9,36 +10,12 @@
 
 <body style='margin : 0px; overflow: hidden; font-family: Arial; font-weight:bold; color: #b2d236;'>
     <div style='position: absolute; top: 5px; left:40px; width:100%; text-align: center; z-index: 1;'>
-        POINT YOUR CAMERA<br />at the AR code
+        POINT YOUR CAMERA<br />at the AR code -1 need link to >> bit.ly/CognitiveCore
     </div>
     <div style='position: absolute; left: 80px; top: 0px; width:100%; z-index: 1;'>
-        <img src="../../data/images/arintouch_50x50.png" height="48" width="48" onclick="toggleVideoPlay()" />
+        <img src="../../data/images/arintouch_50x50.png" height="48" width="48" />
     </div>
     <script>
-        var isPlaying = false;
-
-        function toggleVideoPlay() {
-            console.log('toggleVideoPlay');
-
-            var videoEleToggle = window.videoEle;
-
-            if (videoEleToggle) {
-                console.log('found video');
-                console.log('video src: ' + videoEleToggle.src);
-
-                if (isPlaying) {
-                    console.log('pausing video');
-                    videoEleToggle.pause();
-                    isPlaying = false;
-                }
-                else {
-                    console.log('playing video');
-                    videoEleToggle.play();
-                    isPlaying = true;
-                }
-            }
-        }
-
         window.onload = function () {
             
         }
@@ -155,7 +132,7 @@
         scene.add(markerRoot)
         var artoolkitMarker = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
             type: 'pattern',
-            patternUrl: THREEx.ArToolkitContext.baseURL + '../data/data/patt.patientjourney2'
+            patternUrl: THREEx.ArToolkitContext.baseURL + '../data/data/patt.cognitivecore2'
             // patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji'
         })
 
@@ -187,81 +164,48 @@
         var arWorldRoot = smoothedRoot
 
 
-        var videoEle = document.createElement("video");
-        videoEle.id = 'myVideoEle';
-        videoEle.src = "static/video/ai_the_patient_journey.mp4";
-        videoEle.setAttribute("playsinline", "true");
-        videoEle.autoplay = true;
-        videoEle.loop = true;
+        //var loader = new THREE.GLTFLoader();
 
-        videoEle.load();
+        // Optional: Provide a DRACOLoader instance to decode compressed mesh data
+        //THREE.DRACOLoader.setDecoderPath('/examples/js/libs/draco');
+        //loader.setDRACOLoader(new THREE.DRACOLoader());
 
-        window.videoEle = videoEle; 
+        // Load a glTF resource
 
-        var videoImage = document.createElement("canvas");
-        videoImage.style.backgroundColor = "transparent";
-        videoImage.width = 1280;
-        videoImage.height = 720;
+        // load gltf model and texture                            
+        const objs = [];
+        const loader = new THREE.GLTF2Loader();
+        loader.load("models/cognitivecore.glb", 
+            function (gltf) {
 
-        var videoImageContext = videoImage.getContext('2d');
-        videoImageContext.fillStyle = "#fff";
-        videoImageContext.fillRect(0, 0, videoImage.width, videoImage.height);
+                // model is a THREE.Group (THREE.Object3D)                              
+                const mixer = new THREE.AnimationMixer(gltf.scene);
+                // animations is a list of THREE.AnimationClip
+                for (const anim of gltf.animations) {
+                    mixer.clipAction(anim).play();
+                }
+                // settings in `sceneList`
+                gltf.scene.scale.set(20, 20, 20);
+                //gltf.scene.rotation.copy(new THREE.Euler(0, -3 * Math.PI / 4, 0));
+                gltf.scene.position.set(-1, 0, 0);
 
-        var videoTexture = new THREE.Texture(videoImage);
-        videoTexture.minFilter = THREE.LinearFilter;
-        videoTexture.magFilter = THREE.LinearFilter;
-        videoTexture.format = THREE.RGBFormat;
+                arWorldRoot.add(gltf.scene);
+                objs.push({ gltf, mixer });
+            },
+            // called while loading is progressing
+            function (xhr) {
 
-        var movieMaterial = new THREE.MeshBasicMaterial({
-            map: videoTexture, side: THREE.DoubleSide
-        });
+                console.log((xhr.loaded / xhr.total * 100) + '% loaded');
 
-        var movieGeometry = new THREE.PlaneGeometry(3, 1.25, 4, 4);
+            },
+            // called when loading has errors
+            function (error) {
 
-        var movieScreen = new THREE.Mesh(movieGeometry, movieMaterial);
-        movieScreen.position.set(0, 0.625, 0);
+                console.log('An error happened');
 
-        arWorldRoot.add(movieScreen);
-        //scene.add(movieScreen);
+            }
+        );
 
-
-        //this.camera.position.set(0, 150, 300)
-        //this.camera.lookAt(this.movieScreen.position)
-
-
-
-        //var mixer;
-        //var mesh;
-        //var loader3 = new THREE.JSONLoader();
-        //loader3.load(
-        //    "https://raw.githubusercontent.com/baronwatts/models/master/eagle.js",
-        //    function (geometry) {
-        //        mesh = new THREE.Mesh(
-        //            geometry,
-        //            new THREE.MeshLambertMaterial({
-        //                vertexColors: THREE.FaceColors,
-        //                morphTargets: true
-        //            })
-        //        );
-        //        mesh.scale.set(0.0175, 0.0175, 0.0175);
-        //        //mesh.rotateY(Math.PI);
-        //        mesh.rotateZ(45);
-        //        //mesh.rotateY(-25);
-        //        mesh.rotateX(-90);
-        //        arWorldRoot.add(mesh);
-
-        //        mixer = new THREE.AnimationMixer(mesh);
-        //        var clip = THREE.AnimationClip.CreateFromMorphTargetSequence(
-        //            "gallop",
-        //            geometry.morphTargets,
-        //            60
-        //        );
-        //        mixer
-        //            .clipAction(clip)
-        //            .setDuration(1)
-        //            .play();
-        //    }
-        //);
 
         //////////////////////////////////////////////////////////////////////////////////
         //		render the whole thing on the page
@@ -273,17 +217,12 @@
         var prevTime = Date.now();
 
         onRenderFcts.push(function () {
-
-            //if (mixer) {
-            //    let time = Date.now();
-            //    mixer.update((time - prevTime) * 0.001);
-            //    prevTime = time;
-            //}
-
-            if (videoEle.readyState === videoEle.HAVE_ENOUGH_DATA) {
-                videoImageContext.drawImage(videoEle, 0, 0);
-                if (videoTexture)
-                    videoTexture.needsUpdate = true;
+            if (objs) {
+                objs.forEach(({ mixer }) => {
+                    let time = Date.now();
+                    mixer.update((time - prevTime) * 0.001);
+                    prevTime = time;
+                });
             }
 
             renderer.render(scene, camera);
