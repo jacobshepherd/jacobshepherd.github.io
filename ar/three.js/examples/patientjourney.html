@@ -10,14 +10,17 @@
 
 <body style='margin : 0px; overflow: hidden; font-family: Arial; font-weight:bold; color: #b2d236;'>
     <div style='position: absolute; top: 5px; left:40px; width:100%; text-align: center; z-index: 1;'>
-        POINT YOUR CAMERA<br />at the AR code -0.75 need link to > bit.ly/AI_PatientJourney
+        POINT YOUR CAMERA<br />at the AR code
     </div>
     <div style='position: absolute; left: 80px; top: 0px; width:100%; z-index: 1;'>
         <img src="../../data/images/arintouch_50x50.png" height="48" width="48" />
     </div>
+    <div style='position: absolute; bottom: 0px; width:100%; text-align: center; z-index: 1;'>
+        <a href="https://bit.ly/AI_PatientJourney"><img src="./static/image/watch_medium.png" height="53" width="344" /></a>
+    </div>
     <script>
         window.onload = function () {
-            
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////
@@ -172,13 +175,13 @@
 
         // Load a glTF resource
 
-        // load gltf model and texture                            
+        // load gltf model and texture
         const objs = [];
         const loader = new THREE.GLTF2Loader();
-        loader.load("models/patientjourney.gltf", 
+        loader.load("models/patientjourney.gltf",
             function (gltf) {
 
-                // model is a THREE.Group (THREE.Object3D)                              
+                // model is a THREE.Group (THREE.Object3D)
                 const mixer = new THREE.AnimationMixer(gltf.scene);
                 // animations is a list of THREE.AnimationClip
                 for (const anim of gltf.animations) {
