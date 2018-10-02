@@ -3,6 +3,7 @@
 <!-- three.js library -->
 <script src='vendor/three.js/build/three.min.js'></script>
 <script src="vendor/three.js/examples/js/loaders/GLTF2Loader.js"></script>
+<script src="vendor/three.js/examples/js/libs/stats.min.js"></script>
 
 <!-- ar.js -->
 <script src="../build/ar.js"></script>
@@ -216,8 +217,8 @@
         //////////////////////////////////////////////////////////////////////////////////
         //		render the whole thing on the page
         //////////////////////////////////////////////////////////////////////////////////
-        var stats = new Stats();
-        document.body.appendChild(stats.dom);
+        //var stats = new Stats();
+        //document.body.appendChild(stats.dom);
         // render the scene
 
         var prevTime = Date.now();
@@ -232,7 +233,7 @@
             }
 
             renderer.render(scene, camera);
-            stats.update();
+            //stats.update();
         })
 
         // run the rendering loop
