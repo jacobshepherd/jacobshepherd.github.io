@@ -12,9 +12,6 @@
     <div style='position: absolute; top: 5px; left:40px; width:100%; text-align: center; z-index: 1;'>
         POINT YOUR CAMERA<br />at the AR code.
     </div>
-    <div style='position: absolute; left: 80px; top: 0px; width:100%; z-index: 1;'>
-        <img src="../../data/images/arintouch_50x50.png" height="48" width="48" />
-    </div>
     <script>
 
         window.onload = function () {
@@ -234,7 +231,7 @@
         //		render the whole thing on the page
         //////////////////////////////////////////////////////////////////////////////////
         var stats = new Stats();
-        document.body.appendChild(stats.dom);
+        //document.body.appendChild(stats.dom);
         // render the scene
 
         var prevTime = Date.now();
