@@ -168,13 +168,34 @@
         var mesh;
 
         var loader = new THREE.GLTFLoader();
-        loader.load("models/liver/gltf/scene.gltf", function(gltf)
+        //loader.load("models/liver/gltf/scene.gltf", function(gltf)
+        loader.load("models/liver.transparent.glb", function(gltf)
         {
+        	//Original low poly liver settings
+        	//gltf.scene.scale.set(0.015, 0.015, 0.015);
+        	//gltf.scene.position.set(0, 1.5, 0);
+
         	//gltf.scene.rotateX(-90);
-        	gltf.scene.scale.set(0.015, 0.015, 0.015);
-        	gltf.scene.position.set(0, 1.5, 0);
+        	gltf.scene.scale.set(0.1, 0.1, 0.1);
+        	gltf.scene.position.set(0, 1, .65);
+
+        	console.log("Heres the scene", gltf.scene);
+        	fixMaterials(gltf.scene);
         	arWorldRoot.add(gltf.scene);
         });
+
+        function fixMaterials(scene)
+        {
+        	var mat = new THREE.MeshBasicMaterial( { color:"red", wireframe: true } );
+        	scene.traverse(function(child)
+        	{
+        		if(child.material && child.material.name === "Lever")
+        		{
+        			console.log("Found the material", child);
+        			child.material = mat;
+        		}
+        	})
+        }
 
 
         /*var loader3 = new THREE.JSONLoader();
