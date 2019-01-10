@@ -19,6 +19,12 @@
             
         }
 
+        var settings = {
+          cameraParamsUrl: THREEx.ArToolkitContext.baseURL + '../data/data/camera_para.dat',
+          markerPatternUrl: THREEx.ArToolkitContext.baseURL + '../data/data/patt.mavyret.alt',
+          mainModelUrl: "models/liver.transparent.glb"
+        };
+
         //////////////////////////////////////////////////////////////////////////////////
         //		Init
         //////////////////////////////////////////////////////////////////////////////////
@@ -32,6 +38,7 @@
         // renderer.setPixelRatio( 1/2 );
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.innerHeight / window.innerWidth);
+        console.log("size: ", window.innerWidth, window.innerHeight);
         renderer.domElement.style.position = 'absolute'
         renderer.domElement.style.top = '0px'
         renderer.domElement.style.left = '0px'
@@ -42,6 +49,37 @@
 
         // init scene and camera
         var scene = new THREE.Scene();
+        var mainObject;
+      
+      
+        /////////////////////////////////////////////////////
+        //Model interactiion
+        var lastTouchPoint;
+        var rot = 0;
+        var torque = 0;
+        renderer.domElement.addEventListener("touchstart", function(e)
+        {
+          lastTouchPoint = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+        });
+      
+        renderer.domElement.addEventListener("touchmove", function(e)
+        { 
+          var currentTouchPoint = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+          var delta = currentTouchPoint.x - lastTouchPoint.x;
+          
+          torque = delta * 0.02;
+          
+          lastTouchPoint = currentTouchPoint;
+        });
+      
+        function updateModelRot(deltaMsec)
+        {
+          if(!mainObject) return;
+          
+          torque *= 0.9;
+          rot += torque;
+          mainObject.rotation.set(0, rot, 0);
+        }
 
         //////////////////////////////////////////////////////////////////////////////////
         //		Initialize a basic camera
@@ -90,7 +128,7 @@
 
         // create atToolkitContext
         var arToolkitContext = new THREEx.ArToolkitContext({
-            cameraParametersUrl: THREEx.ArToolkitContext.baseURL + '../data/data/camera_para.dat',
+            cameraParametersUrl: settings.cameraParamsUrl, 
             detectionMode: 'mono',
             maxDetectionRate: 30,
             canvasWidth: 80 * 3,
@@ -132,7 +170,7 @@
         scene.add(markerRoot)
         var artoolkitMarker = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
             type: 'pattern',
-            patternUrl: THREEx.ArToolkitContext.baseURL + '../data/data/patt.mavyret.alt'
+            patternUrl: settings.markerPatternUrl //THREEx.ArToolkitContext.baseURL + '../data/data/patt.mavyret'
             // patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji'
         })
 
@@ -168,7 +206,8 @@
 
         var loader = new THREE.GLTFLoader();
         //loader.load("models/liver/gltf/scene.gltf", function(gltf)
-        loader.load("models/liver.transparent.glb", function(gltf)
+        //loader.load("models/liver.transparent.glb", function(gltf)
+        loader.load(settings.mainModelUrl, function(gltf)
         {
         	//Original low poly liver settings
         	//gltf.scene.scale.set(0.015, 0.015, 0.015);
@@ -176,15 +215,18 @@
 
         	//gltf.scene.rotateX(-90);
         	gltf.scene.scale.set(0.1, 0.1, 0.1);
-        	gltf.scene.position.set(0, 1, .65);
+        	gltf.scene.position.set(0, 1, 0);
 
         	console.log("Heres the scene", gltf.scene);
         	fixMaterials(gltf.scene);
         	arWorldRoot.add(gltf.scene);
+          
+          mainObject = gltf.scene;
         });
-
-		//loader.load("https://cdn.glitch.com/ac006d12-4e42-4d81-a0af-7e66cc7ae4b2%2Fliver%20copy.glb?1547152036879", function(gltf)
-        loader.load("models/liver copy.glb", function(gltf)
+      
+        /*
+        //loader.load("models/liver copy.glb", function(gltf)
+        loader.load("https://cdn.glitch.com/ac006d12-4e42-4d81-a0af-7e66cc7ae4b2%2Fliver%20copy.glb?1547152036879", function(gltf)
         {
         	//Original low poly liver settings
         	//gltf.scene.scale.set(0.015, 0.015, 0.015);
@@ -194,10 +236,9 @@
         	gltf.scene.scale.set(0.3, 0.3, 0.3);
         	gltf.scene.position.set(0, 2.5, 0);
 
-        	console.log("Heres the scene", gltf.scene);
         	fixMaterials(gltf.scene);
         	arWorldRoot.add(gltf.scene);
-        });
+        });*/
 
         function fixMaterials(scene)
         {
@@ -216,7 +257,11 @@
         		}
         	})
         }
-        
+      
+      
+
+
+
         //////////////////////////////////////////////////////////////////////////////////
         //		render the whole thing on the page
         //////////////////////////////////////////////////////////////////////////////////
@@ -250,6 +295,8 @@
             onRenderFcts.forEach(function (onRenderFct) {
                 onRenderFct(deltaMsec / 1000, nowMsec / 1000)
             })
+          
+            updateModelRot(deltaMsec);
         })
     </script>
 </body>
