@@ -183,51 +183,40 @@
         	arWorldRoot.add(gltf.scene);
         });
 
+		//loader.load("https://cdn.glitch.com/ac006d12-4e42-4d81-a0af-7e66cc7ae4b2%2Fliver%20copy.glb?1547152036879", function(gltf)
+        loader.load("models/liver copy.glb", function(gltf)
+        {
+        	//Original low poly liver settings
+        	//gltf.scene.scale.set(0.015, 0.015, 0.015);
+        	//gltf.scene.position.set(0, 1.5, 0);
+
+        	gltf.scene.rotateX(90);
+        	gltf.scene.scale.set(0.3, 0.3, 0.3);
+        	gltf.scene.position.set(0, 2.5, 0);
+
+        	console.log("Heres the scene", gltf.scene);
+        	fixMaterials(gltf.scene);
+        	arWorldRoot.add(gltf.scene);
+        });
+
         function fixMaterials(scene)
         {
         	var mat = new THREE.MeshStandardMaterial( { transparent:true, opacity: 0.75, color:"red", wireframe: false } );
+          var textMat = new THREE.MeshBasicMaterial( { color: "#B0D238" });
         	scene.traverse(function(child)
         	{
         		if(child.material && child.material.name === "Lever")
         		{
-        			console.log("Found the material", child);
         			child.material = mat;
+        		}
+            
+            if(child.material && child.material.name === "Material.001")
+        		{
+        			child.material = textMat;
         		}
         	})
         }
-
-
-        /*var loader3 = new THREE.JSONLoader();
-        loader3.load(
-            "https://raw.githubusercontent.com/baronwatts/models/master/eagle.js",
-            function (geometry) {
-                mesh = new THREE.Mesh(
-                    geometry,
-                    new THREE.MeshLambertMaterial({
-                        vertexColors: THREE.FaceColors,
-                        morphTargets: true
-                    })
-                );
-                mesh.scale.set(0.0175, 0.0175, 0.0175);
-                //mesh.rotateY(Math.PI);
-                mesh.rotateZ(45);
-                //mesh.rotateY(-25);
-                mesh.rotateX(-90);
-                arWorldRoot.add(mesh);
-
-                mixer = new THREE.AnimationMixer(mesh);
-                var clip = THREE.AnimationClip.CreateFromMorphTargetSequence(
-                    "gallop",
-                    geometry.morphTargets,
-                    60
-                );
-                mixer
-                    .clipAction(clip)
-                    .setDuration(1)
-                    .play();
-            }
-        );*/
-
+        
         //////////////////////////////////////////////////////////////////////////////////
         //		render the whole thing on the page
         //////////////////////////////////////////////////////////////////////////////////
