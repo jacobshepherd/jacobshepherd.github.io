@@ -22,9 +22,11 @@
         var settings = {
           cameraParamsUrl: THREEx.ArToolkitContext.baseURL + '../data/data/camera_para.dat',
           markerPatternUrl: THREEx.ArToolkitContext.baseURL + '../data/data/patt.mavyret.alt',
-          mainModelUrl: "models/liver.transparent.glb"
+          mainModelUrl: "models/liver.transparent.glb",
+          textModelUrl: "models/liver copy.glb"
         };
 
+      
         //////////////////////////////////////////////////////////////////////////////////
         //		Init
         //////////////////////////////////////////////////////////////////////////////////
@@ -60,6 +62,7 @@
         renderer.domElement.addEventListener("touchstart", function(e)
         {
           lastTouchPoint = { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+          e.preventDefault();
         });
       
         renderer.domElement.addEventListener("touchmove", function(e)
@@ -70,6 +73,7 @@
           torque = delta * 0.02;
           
           lastTouchPoint = currentTouchPoint;
+          e.preventDefault();
         });
       
         function updateModelRot(deltaMsec)
@@ -203,17 +207,10 @@
 
         var mixer;
         var mesh;
-
         var loader = new THREE.GLTFLoader();
-        //loader.load("models/liver/gltf/scene.gltf", function(gltf)
-        //loader.load("models/liver.transparent.glb", function(gltf)
+        
         loader.load(settings.mainModelUrl, function(gltf)
         {
-        	//Original low poly liver settings
-        	//gltf.scene.scale.set(0.015, 0.015, 0.015);
-        	//gltf.scene.position.set(0, 1.5, 0);
-
-        	//gltf.scene.rotateX(-90);
         	gltf.scene.scale.set(0.1, 0.1, 0.1);
         	gltf.scene.position.set(0, 1, 0);
 
@@ -224,26 +221,22 @@
           mainObject = gltf.scene;
         });
       
-        /*
-        //loader.load("models/liver copy.glb", function(gltf)
-        loader.load("https://cdn.glitch.com/ac006d12-4e42-4d81-a0af-7e66cc7ae4b2%2Fliver%20copy.glb?1547152036879", function(gltf)
+        loader.load(settings.textModelUrl, function(gltf)
         {
-        	//Original low poly liver settings
-        	//gltf.scene.scale.set(0.015, 0.015, 0.015);
-        	//gltf.scene.position.set(0, 1.5, 0);
-
         	gltf.scene.rotateX(90);
         	gltf.scene.scale.set(0.3, 0.3, 0.3);
         	gltf.scene.position.set(0, 2.5, 0);
 
         	fixMaterials(gltf.scene);
         	arWorldRoot.add(gltf.scene);
-        });*/
+        });
 
         function fixMaterials(scene)
         {
         	var mat = new THREE.MeshStandardMaterial( { transparent:true, opacity: 0.75, color:"red", wireframe: false } );
           var textMat = new THREE.MeshBasicMaterial( { color: "#B0D238" });
+          var textMat2 = new THREE.MeshBasicMaterial( { color: "white" });
+          var backgroundMat = new THREE.MeshBasicMaterial( { color: "black", transparent:true, opacity:0.75 });
         	scene.traverse(function(child)
         	{
         		if(child.material && child.material.name === "Lever")
@@ -251,9 +244,19 @@
         			child.material = mat;
         		}
             
+            if(child.material && child.material.name === "SVGMat")
+        		{
+        			child.material = textMat2;
+        		}
+            
             if(child.material && child.material.name === "Material.001")
         		{
         			child.material = textMat;
+        		}
+            
+            if(child.material && child.material.name === "Background")
+        		{
+        			child.material = backgroundMat;
         		}
         	})
         }
