@@ -39,7 +39,9 @@ cameraTrigger.onclick = function() {
 
     xhttp.open("POST", "https://faces.azurewebsites.net/persons/identify", true);
     xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(cameraSensor.toDataURL());
+    var base64image = cameraSensor.toDataURL().split(',')[1];
+
+    xhttp.send(base64image);
 
     // track.stop();
 };
