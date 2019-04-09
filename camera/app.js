@@ -28,6 +28,19 @@ cameraTrigger.onclick = function() {
     cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
     cameraOutput.src = cameraSensor.toDataURL("image/webp");
     cameraOutput.classList.add("taken");
+
+    var xhttp = new XMLHttpRequest();
+
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            alert(this.responseText);
+        }
+    };
+
+    xhttp.open("POST", "https://cognitiveservices.intouchg.co/persons/identify", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(cameraSensor.toDataURL());
+
     // track.stop();
 };
 
