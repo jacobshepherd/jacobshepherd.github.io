@@ -33,14 +33,15 @@ cameraTrigger.onclick = function() {
 
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            alert(this.responseText);
+            var response = JSON.parse(this.responseText);
+            alert(response.name);
         }
     };
 
     xhttp.open("POST", "https://faces.azurewebsites.net/persons/identify", true);
     xhttp.setRequestHeader("Content-type", "application/json");
-    var base64image = cameraSensor.toDataURL().split(',')[1];
-
+    var base64image = '"' + cameraSensor.toDataURL().split(',')[1] + '"';
+    
     xhttp.send(base64image);
 
     // track.stop();
