@@ -37,7 +37,7 @@ cameraTrigger.onclick = function() {
         }
     };
 
-    xhttp.open("POST", "https://cognitiveservices.intouchg.co/persons/identify", true);
+    xhttp.open("POST", "https://faces.azurewebsites.net/persons/identify", true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send(cameraSensor.toDataURL());
 
